@@ -1,0 +1,470 @@
+//Objects
+Player player = new Player();
+Enemy enemy = new Enemy();
+//Bullet arraylist
+ArrayList<Bullet> bullets;
+ArrayList<Jshot> jshots;
+//Vars to regulate shooting speed
+boolean canShoot = true;
+boolean enemyShot = true;
+boolean hit = false;
+float canShootCounter;
+float enemyShotCounter;
+int time = millis();
+int counter = 0;
+boolean JellyIsShooting = false;
+
+
+int i;
+int j;
+
+PImage bg, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, jelly, jelly2, jelly3, jelly4, jelly5, jelly6, badjelly, badjelly2, badjelly3, badjelly4, jshot, laser, face, vic, def ;
+// Player
+int charpic = 1;
+int currentX = 310;
+int currentY = 790;
+int playerHP = 100;
+int playerBlackHP = 0;
+boolean playerDead = false;
+boolean[] keys;
+boolean shooting = true;
+// Enemy
+float enemyX, enemyY;
+float xspeed = 2.8;
+float yspeed = 2.2;
+int xdir = 1;
+int ydir = 1;
+int enemyHP = 400;
+int enemyBlackHP = 0;
+int blackLocation = 575;
+boolean enemyDead = false;
+int jellyPic = 1;
+boolean badJelly = false;
+int enemyShootingSpeed = 700;
+
+
+void setup () {
+  size(606 ,1001);
+  bg = loadImage("BG1.jpg");
+  bullets = new ArrayList<Bullet>();
+  jshots = new ArrayList<Jshot>();
+  player = new Player();
+  enemy = new Enemy();
+  c1 = loadImage("c1.png");
+  c2 = loadImage("c2.png");
+  c3 = loadImage("c3.png");
+  c4 = loadImage("c4.png");
+  c5 = loadImage("c5.png");
+  c6 = loadImage("c6.png");
+  c7 = loadImage("c7.png");
+  c8 = loadImage("c8.png");
+  c9 = loadImage("c9.png");
+  c10 = loadImage("c10.png");
+  c11 = loadImage("c11.png");
+  c12 = loadImage("c12.png");
+  jelly = loadImage("jelly.png");
+  jelly2 = loadImage("jelly2.png");
+  jelly3 = loadImage("jelly3.png");
+  jelly4 = loadImage("jelly4.png");
+  jelly5 = loadImage("jellydead.png");
+  jelly6 = loadImage("jelly6.png");
+  badjelly = loadImage("badjelly.png");
+  badjelly2 = loadImage("badjelly2.png");
+  badjelly3 = loadImage("badjelly3.png");
+  badjelly4 = loadImage("badjelly4.png");
+  laser = loadImage("laser.png");
+  jshot = loadImage("jshot.png");
+  face = loadImage("face.png");
+  vic = loadImage("vic.png");
+  def = loadImage("def.png");
+  c13 = loadImage("playerdead.png");
+  image(c1,currentX, currentY,80 ,95);
+  enemyX = width/2;
+  enemyY = height/3;
+  image(jelly, enemyX, enemyY, 160 ,180);
+  
+  keys=new boolean[4];
+  keys[0]=false;
+  keys[1]=false;
+  keys[2]=false;
+  keys[3]=false;
+}
+
+
+void draw () {
+  player.update();
+  enemy.update();
+  background(bg);
+  // Player HP
+    fill(255,0,0);
+    rect (31, 60, 200, 20, 7);
+    fill(0);
+    rect (31, 60, playerBlackHP , 20, 7);
+    image(face, 230, 35 ,60 ,63);
+    textSize(28);
+    fill(255);
+    text(playerHP, 115, 50);
+  // Enemy HP
+    fill(255,0,0);
+    rect (375, 60, 200, 20, 7);
+    fill(0);
+    rect (blackLocation, 60, enemyBlackHP, 20, 7);
+    image(jelly2, 290, 10 ,80 ,85);
+    textSize(28);
+    fill(255);
+    text(enemyHP, 445, 50);
+    
+  switch(charpic){
+    case 1:
+      image(c1,currentX, currentY,80 ,95);
+      break;
+    case 2:
+      image(c2,currentX, currentY,80 ,95);
+      break;
+    case 3:
+      image(c4,currentX, currentY,80 ,95);
+      break;
+    case 4:
+      image(c3,currentX, currentY,80 ,95);
+      break;
+    case 5:
+      image(c9,currentX, currentY,80 ,95);
+      break;
+    case 6:
+      image(c10,currentX, currentY,80 ,95);
+      break;
+    case 7:
+      image(c12,currentX, currentY,80 ,95);
+      break;
+    case 8:
+      image(c11,currentX, currentY,80 ,95);
+      break;
+    case 9:
+      image(c13,currentX, currentY,80 ,95);
+      image(def,width/2 - 250, height/2 - 250 ,500,320);
+      break;
+  }
+  
+    switch(jellyPic){
+      case 1:
+        image(jelly, enemyX, enemyY, 160 ,180);
+        break;
+      case 2:
+        image(jelly2, enemyX, enemyY, 160 ,180);
+        break;
+      case 3:
+        image(jelly3, enemyX, enemyY, 160, 180);
+        break;
+      case 4:
+        image(jelly4, enemyX, enemyY, 160, 180);
+        break;
+      case 5:
+        image(jelly5, enemyX, enemyY, 160, 180);
+        image(vic,width/2 - 250, height/2 - 250 ,500,400); 
+        break;
+      case 6:
+        image(jelly6, enemyX, enemyY, 160, 180);
+        image(vic,width/2 - 250, height/2 - 250 ,500,400); 
+        break;
+      case 7:
+        image(badjelly, enemyX, enemyY, 160, 180);
+        break;
+      case 8:
+        image(badjelly2, enemyX, enemyY, 160, 180);
+        break;
+      case 9:
+        image(badjelly3, enemyX, enemyY, 160, 180);
+        break;
+      case 10:
+        image(badjelly4, enemyX, enemyY, 160, 180);
+        break;
+    }
+    hit = false;
+    
+  for (i = bullets.size()-1; i >= 0; i--) {
+    //you need a seperate var to get the object from the bullets arraylist then use that variable to call the functions
+    Bullet bullet = bullets.get(i);
+    bullet.update();
+  }
+  
+  for (j = jshots.size()-1; j >= 0; j--) {
+    //you need a seperate var to get the object from the bullets arraylist then use that variable to call the functions
+    Jshot jshot = jshots.get(j);
+    jshot.update();
+  }
+  
+   // Player movement
+   
+  if (playerDead == false) {
+   if (keys[0] && currentY > 70) {
+      currentY -= 5;
+      charpic = 1;
+   }
+   if (keys[1] && currentX < width - 80) {
+      currentX += 5;
+      charpic = 2;
+   }
+   if (keys[2] && currentX > 0) {
+      currentX -= 5;
+      charpic = 3;
+   }
+   if (keys[3] && currentY < height - 95) {
+      currentY += 5;
+      charpic = 4;
+   }
+   
+   //cross
+   
+   if (keys[0] && keys[1]) {
+     charpic = 5;
+   }
+   if (keys[0] && keys[2]) {
+     charpic = 6;
+   }
+   if (keys[3] && keys[1]) {
+     charpic = 7;
+   }
+   if (keys[3] && keys[2]) {
+     charpic = 8;
+   }
+  }
+  else {
+    charpic = 9;
+  }
+   
+   // Enemy movement
+   
+   if (enemyDead == false){
+     enemyX += xspeed * xdir;
+     enemyY += yspeed * ydir;
+     if (enemyX > width - 160 || enemyX < 0) {
+       xdir *= -1;
+     }
+     if (enemyY > height - 180  || enemyY < 0) {
+       ydir *= -1;
+     }
+     if (xdir < 0 && hit == false) {
+       if (badJelly) {
+         jellyPic = 7;
+       }
+       else if (!badJelly) {
+         jellyPic = 1;
+       }
+     }
+     else if (xdir > 0 && hit == false){
+       if (badJelly) {
+         jellyPic = 8;
+       }
+       else if (!badJelly) {
+         jellyPic = 2;
+       }
+     }
+   }
+   else if (enemyDead == true && xdir < 0){
+     jellyPic = 5;
+   }
+   else if (enemyDead == true && xdir > 0){
+     jellyPic = 6;
+   }
+   
+   // Change enemy speed when 200HP and less
+   
+   if (enemyHP <= 200) {
+     xspeed = 4;
+     yspeed = 3.4;
+     badJelly = true;
+     enemyShootingSpeed = 500;
+   }
+   
+   // Player shooting (not moving)
+   
+   if (keys[0] == false && keys[1]==false && keys[2]==false && keys[3]==false) {
+     shooting = true;
+   }
+   
+   // Enemy shooting timer
+   
+   if (millis() > time + enemyShootingSpeed) {
+     JellyIsShooting = true;
+     time = millis();
+   }
+}
+
+class Player {
+  PVector location;
+  Player() {
+    location = new PVector(currentX, currentY);
+  } 
+  void update() {
+    if (shooting == true && playerDead == false && enemyDead == false) {
+      // this regulates the shooting speed
+      if (canShoot == true) {
+        bullets.add( new Bullet());
+        canShoot = false;
+        canShootCounter = 0;
+      }
+    }
+    // this checks if the right amount of time has passed before canShoot can = true again
+    if (canShoot == false) {
+      canShootCounter ++;
+      //if the right amount of time has passed. make canShoot true
+      if (canShootCounter == 5)/*change this number to change the duration*/{
+        canShoot = true;
+      }
+    }
+  }
+}
+
+class Enemy {
+  PVector jlocation;
+  Enemy() {
+    jlocation = new PVector(enemyX, enemyY);
+  } 
+  void update() {
+    if (JellyIsShooting == true && enemyDead == false && playerDead == false) {
+      // this regulates the shooting speed
+      if (enemyShot == true) {
+        jshots.add( new Jshot());
+        JellyIsShooting = false;
+        enemyShot = false;
+        enemyShotCounter = 0;
+      }
+    }
+    // this checks if the right amount of time has passed before canShoot can = true again
+    if (enemyShot == false) {
+      enemyShotCounter ++;
+      //if the right amount of time has passed. make canShoot true
+      if (enemyShotCounter == 5)/*change this number to change the duration*/{
+        enemyShot = true;
+      }
+    }
+  }
+}
+
+class Bullet {
+  //standard PVector used for the location of the bullet
+  PVector location;
+  //vars used to check the angle between location and the mouse
+  float oldPosX, oldPosY, rotation, speed;
+  Bullet() {
+    //places the bullet starts from character
+    location= new PVector(currentX, currentY);
+    //this checks the angle
+    oldPosX = enemyX + 50;
+    oldPosY = enemyY + 60;
+    rotation = atan2(oldPosY - location.y, oldPosX - location.x) / PI * 180;
+    //bullet speed
+    speed = 10;//change this number to change the speed
+  } 
+  void update() {
+    //move the bullet
+    location.x = location.x + cos(rotation/180*PI)*speed;
+    location.y = location.y + sin(rotation/180*PI)*speed;
+    image(laser, location.x, location.y, 50, 20);
+
+    //removes the bullet from the arrayList if it is off the room
+    if (location.x > 0 && location.x < width && location.y > 0 && location.x < height) {
+    }
+    else {
+      bullets.remove(i);
+    }
+    // removes bullet if hit
+    //ellipse(enemyX + 90, enemyY + 135, 120, 85);
+    if (location.x > enemyX && location.x < enemyX + 150) {
+      if (location.y > enemyY + 50 && location.y < enemyY + 150) {
+        hit = true;
+        if (jellyPic == 1) {
+          jellyPic = 3;
+        }
+        if (jellyPic == 2) {
+          jellyPic = 4;
+        }
+        if (jellyPic == 7) {
+          jellyPic = 9;
+        }
+        if (jellyPic == 8) {
+          jellyPic = 10;
+        }
+        bullets.remove(i);
+        if (enemyHP > 0) {
+          enemyHP -= 2;
+          enemyBlackHP += 1;
+          blackLocation -= 1;
+        }
+        else {
+          enemyDead = true;
+        }
+        
+      }
+    }
+  }
+}
+
+class Jshot {
+  //standard PVector used for the location of the bullet
+  PVector jlocation;
+  //vars used to check the angle between location and the mouse
+  float joldPosX, joldPosY, jrotation, jspeed;
+  Jshot() {
+    //places the bullet starts from enemy
+    jlocation = new PVector(enemyX + 50, enemyY + 80);
+    //this checks the angle
+    joldPosX = currentX;
+    joldPosY = currentY;
+    jrotation = atan2(joldPosY - jlocation.y, joldPosX - jlocation.x) / PI * 180;
+    //bullet speed
+    jspeed = 5;//change this number to change the speed
+  } 
+  void update() {
+    //move the bullet
+    jlocation.x = jlocation.x + cos(jrotation/180*PI)*jspeed;
+    jlocation.y = jlocation.y + sin(jrotation/180*PI)*jspeed;
+    image(jshot, jlocation.x, jlocation.y, 100, 70);
+
+    //removes the bullet from the arrayList if it is off the room
+    if (jlocation.x > 0 && jlocation.x < width && jlocation.y > 0 && jlocation.x < height) {
+    }
+    else {
+      jshots.remove(j);
+    }
+    // removes bullet if hit
+    if (jlocation.x > currentX - 40 && jlocation.x < currentX + 30) {
+      if (jlocation.y > currentY - 35 && jlocation.y < currentY + 40) {
+        jshots.remove(j);
+        if (playerHP > 0) {
+          playerHP -= 10;
+          playerBlackHP += 20;
+        }
+        else {
+          playerDead = true;
+        }
+      }
+    }
+  }
+}
+
+void keyPressed() {
+   if (keyCode == UP || key == 'w' || key == 'W')
+     keys[0]=true;
+     shooting = false;
+   if (keyCode == RIGHT || key == 'd' || key == 'D')
+     keys[1]=true;
+     shooting = false;
+   if (keyCode == LEFT || key == 'a' || key == 'A')
+     keys[2]=true;
+     shooting = false;
+   if (keyCode == DOWN || key == 's' || key == 'S')
+     keys[3]=true;
+     shooting = false;
+}
+
+void keyReleased() {
+ if (keyCode == UP || key == 'w' || key == 'W')
+     keys[0]=false;
+   if (keyCode == RIGHT || key == 'd' || key == 'D')
+     keys[1]=false;
+   if (keyCode == LEFT || key == 'a' || key == 'A')
+     keys[2]=false;
+   if (keyCode == DOWN || key == 's' || key == 'S')
+     keys[3]=false;
+}
